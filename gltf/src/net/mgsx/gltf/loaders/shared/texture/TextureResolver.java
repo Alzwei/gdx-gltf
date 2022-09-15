@@ -47,7 +47,8 @@ public class TextureResolver implements Disposable
 	private void initPBO(){
 		pboHandle = Gdx.gl.glGenBuffer();
 		Gdx.gl.glBindBuffer(GL30.GL_PIXEL_UNPACK_BUFFER, pboHandle);
-		Gdx.gl.glBufferData(GL30.GL_PIXEL_UNPACK_BUFFER, 100000000, null, GL30.GL_STREAM_DRAW);
+		int pboBufferSize = 100000000;
+		Gdx.gl.glBufferData(GL30.GL_PIXEL_UNPACK_BUFFER, pboBufferSize, null, GL30.GL_STREAM_DRAW);
 		Gdx.gl.glBindBuffer(GL30.GL_PIXEL_UNPACK_BUFFER, 0);
 	}
 

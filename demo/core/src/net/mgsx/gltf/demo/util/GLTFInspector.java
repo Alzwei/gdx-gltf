@@ -32,7 +32,7 @@ public class GLTFInspector {
 		if(asset.data != null) logData(asset);
 		if(asset.scenes.size > 0) logScenes(asset);
 		if(asset.animations.size > 0) logAnimations(asset);
-		if(asset.textures.size > 0) logTexures(asset);
+		//if(asset.textures.size > 0) logTexures(asset);
 		if(allLights.size > 0) logLights(allLights);
 		if(allCameras.size > 0) logCameras(allCameras);
 	}
@@ -105,9 +105,9 @@ public class GLTFInspector {
 		if(asset.maxBones > 0) log("Bones", "max", asset.maxBones, "count", nBones);
 	}
 
-	private void logTexures(SceneAsset asset) {
+	/*private void logTexures(SceneAsset asset) {
 		log("Managed textures", "count", asset.textures.size);
-	}
+	}*/
 
 	private void logAnimations(SceneAsset asset) {
 		int t=0, r=0, s=0, w=0;

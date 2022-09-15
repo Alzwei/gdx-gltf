@@ -169,12 +169,11 @@ public class TexturePBO extends Texture {
 
         @Override
         public void run() {
+            Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.getTextureObjectHandle());
             Gdx.gl.glBindBuffer(GL30.GL_PIXEL_UNPACK_BUFFER, pboHandle);
             Gdx.gl30.glUnmapBuffer(GL30.GL_PIXEL_UNPACK_BUFFER);
 
-            Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.getTextureObjectHandle());
-
-            Gdx.gl.glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
+            //Gdx.gl.glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
 
             Gdx.gl30.glTexImage2D(GL_TEXTURE_2D, lvl, pixmap.getGLInternalFormat(), pixmap.getWidth(), pixmap.getHeight(), 0, pixmap.getGLFormat(), pixmap.getGLType(), null);
 
@@ -263,6 +262,8 @@ public class TexturePBO extends Texture {
         }
         ByteBuffer buffer = pixmap.getPixels();
         BufferUtils.copy(buffer, mappedBuffer[0], pixmapSizeBytes);
+        mappedBuffer[0].flip();
+        buffer.clear();
     }
 
 
