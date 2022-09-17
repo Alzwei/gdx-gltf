@@ -175,6 +175,7 @@ public class GLTFLoaderBase implements Disposable {
 			
 			return model;
 		}catch(RuntimeException e){
+			e.printStackTrace(System.out);
 			dispose();
 			throw e;
 		}

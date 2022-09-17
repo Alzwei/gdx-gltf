@@ -122,11 +122,12 @@ public class TexturePBO extends Texture {
             Gdx.app.postRunnable(pBOtoTextureTask);
             synchronized (this) {
                 try {
-                    this.wait(3000);
+                    this.wait();
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
+
 
             //everything is the same as in the original class
             if (disposePixmap) dataPixmap.dispose();
@@ -169,6 +170,7 @@ public class TexturePBO extends Texture {
 
         @Override
         public void run() {
+
             Gdx.gl.glBindTexture(GL_TEXTURE_2D, texture.getTextureObjectHandle());
             Gdx.gl.glBindBuffer(GL30.GL_PIXEL_UNPACK_BUFFER, pboHandle);
             Gdx.gl30.glUnmapBuffer(GL30.GL_PIXEL_UNPACK_BUFFER);
@@ -186,7 +188,7 @@ public class TexturePBO extends Texture {
             Gdx.gl.glBindTexture(GL_TEXTURE_2D, 0);
             Gdx.gl.glBindBuffer(GL30.GL_PIXEL_UNPACK_BUFFER, 0);
 
-            synchronized (texture) {
+            synchronized (texture){
                 texture.notify();
             }
         }
@@ -207,31 +209,30 @@ public class TexturePBO extends Texture {
             pixmap = tmp;
 
             copyPixmapToPBO(pboHandle, pixmap);
-
             PBOtoTextureTask pBOtoTextureTask = new PBOtoTextureTask(pboHandle, this, pixmap, level);
             Gdx.app.postRunnable(pBOtoTextureTask);
 
             synchronized (this) {
                 try {
-                    this.wait(3000);
+
+                    this.wait();
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.out);
                 }
             }
-
             width = pixmap.getWidth() / 2;
             height = pixmap.getHeight() / 2;
             level++;
         }
     }
 
-    static class BufferBinder implements Runnable {
+    static class BindBufferTask implements Runnable {
         private final Buffer[] mappedBuffer;
         private final int pboHandle;
         private final int pixmapSizeBytes;
         private final Object waitObj;
 
-        BufferBinder(Buffer[] mappedBuffer, int pboHandle, int pixmapSizeBytes, Object waitObj) {
+        BindBufferTask(Buffer[] mappedBuffer, int pboHandle, int pixmapSizeBytes, Object waitObj) {
             this.mappedBuffer = mappedBuffer;
             this.pboHandle = pboHandle;
             this.pixmapSizeBytes = pixmapSizeBytes;
@@ -252,14 +253,15 @@ public class TexturePBO extends Texture {
     private void copyPixmapToPBO(int pboHandle, Pixmap pixmap) {
         int pixmapSizeBytes = pixmap.getPixels().capacity();
         final Buffer[] mappedBuffer = new Buffer[1];
-        Gdx.app.postRunnable(new BufferBinder(mappedBuffer, pboHandle, pixmapSizeBytes, this));
+        Gdx.app.postRunnable(new BindBufferTask(mappedBuffer, pboHandle, pixmapSizeBytes, this));
         synchronized (this) {
             try {
-                this.wait(3000);
+                this.wait();
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
         }
+
         ByteBuffer buffer = pixmap.getPixels();
         BufferUtils.copy(buffer, mappedBuffer[0], pixmapSizeBytes);
         mappedBuffer[0].flip();

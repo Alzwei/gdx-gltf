@@ -52,10 +52,10 @@ public class TextureResolver implements Disposable
 		Gdx.gl.glBindBuffer(GL30.GL_PIXEL_UNPACK_BUFFER, 0);
 	}
 
-	private static class CreateTextureRunnable implements Runnable{
+	private static class CreateTextureTask implements Runnable{
 		private final Object waitObj;
 		private final int[] textureHandle;
-		private CreateTextureRunnable(int[] textureHandle, Object waitObj){
+		private CreateTextureTask(int[] textureHandle, Object waitObj){
 			this.waitObj = waitObj;
 			this.textureHandle = textureHandle;
 		}
@@ -92,11 +92,11 @@ public class TextureResolver implements Disposable
 					//check if render begin
 					if (Gdx.app.getGraphics().getFrameId() > 0 && isUseGL30) {
 						//Create texture postRunnable
-						Gdx.app.postRunnable(new CreateTextureRunnable(textureHandle, this));
+						Gdx.app.postRunnable(new CreateTextureTask(textureHandle, this));
 						//Waiting for texture creation
 						synchronized (this) {
 							try {
-								this.wait(3000);
+								this.wait();
 							} catch (InterruptedException ex) {
 								ex.printStackTrace();
 							}
