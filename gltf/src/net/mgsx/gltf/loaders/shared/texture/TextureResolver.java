@@ -17,6 +17,8 @@ import net.mgsx.gltf.data.texture.GLTFTextureInfo;
 import net.mgsx.gltf.loaders.exceptions.GLTFRuntimeException;
 import net.mgsx.gltf.loaders.shared.GLTFTypes;
 
+import java.sql.SQLOutput;
+
 public class TextureResolver implements Disposable
 {
 	protected final ObjectMap<Integer, Texture> texturesSimple = new ObjectMap<Integer, Texture>();
@@ -86,8 +88,7 @@ public class TextureResolver implements Disposable
 				}
 
 				ObjectMap<Integer, Texture> textureMap = useMipMaps ? texturesMipmap : texturesSimple;
-
-				if (!textureCache.containsKey(imageResolver.getUri(i))) {
+				if (!textureCache.containsKey(imageResolver.getUri(glTexture.source))) {
 					final int[] textureHandle = new int[1];
 					//check if render begin
 					if (Gdx.app.getGraphics().getFrameId() > 0 && isUseGL30) {
@@ -107,11 +108,11 @@ public class TextureResolver implements Disposable
 						TexturePBO texture = new TexturePBO(imageResolver.get(glTexture.source), useMipMaps);
 						textureMap.put(glTexture.source, texture);
 					}
-					textureCache.put(imageResolver.getUri(i), textureMap.get(glTexture.source));
+					textureCache.put(imageResolver.getUri(glTexture.source), textureMap.get(glTexture.source));
 				} else {
 					//if the texture is loaded, increase the usage counter
-					textureMap.put(glTexture.source, textureCache.get(imageResolver.getUri(i)));
-					Texture texture = textureCache.get(imageResolver.getUri(i));
+					textureMap.put(glTexture.source, textureCache.get(imageResolver.getUri(glTexture.source)));
+					Texture texture = textureCache.get(imageResolver.getUri(glTexture.source));
 					if (texture instanceof TexturePBO){
 						((TexturePBO) texture).incrementUsesCount();
 					}
