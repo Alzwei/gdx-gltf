@@ -17,7 +17,6 @@ import net.mgsx.gltf.data.texture.GLTFTextureInfo;
 import net.mgsx.gltf.loaders.exceptions.GLTFRuntimeException;
 import net.mgsx.gltf.loaders.shared.GLTFTypes;
 
-import java.sql.SQLOutput;
 
 public class TextureResolver implements Disposable
 {

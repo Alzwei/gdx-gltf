@@ -170,7 +170,7 @@ public class GLTFLoaderBase implements Disposable {
 
 			model.textureResolver = textureResolver;
 			
-			copy(loadedMeshes, model.meshes = new Array<Mesh>());
+			//copy(loadedMeshes, model.meshes = new Array<Mesh>());
 			loadedMeshes.clear();
 			
 			return model;
