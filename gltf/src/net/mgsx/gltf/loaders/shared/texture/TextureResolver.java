@@ -103,6 +103,8 @@ public class TextureResolver implements Disposable
 						}
 						TexturePBO texture = new TexturePBO(textureHandle[0], pboHandle, imageResolver.get(glTexture.source), useMipMaps);
 						textureMap.put(glTexture.source, texture);
+
+
 					} else {
 						TexturePBO texture = new TexturePBO(imageResolver.get(glTexture.source), useMipMaps);
 						textureMap.put(glTexture.source, texture);
