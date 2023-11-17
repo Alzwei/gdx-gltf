@@ -1,12 +1,12 @@
 package net.mgsx.gltf.scene3d.scene;
 
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.model.Animation;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import net.mgsx.gltf.data.GLTF;
-import net.mgsx.gltf.loaders.shared.texture.TextureResolver;
 
 /**
  * gdx view of an asset file : Model, Camera (as template), lights (as template), textures
@@ -23,7 +23,7 @@ public class SceneAsset implements Disposable
 	public int maxBones;
 
 	public TextureResolver textureResolver;
-	
+
 	@Override
 	public void dispose() {
 		if(scenes != null){

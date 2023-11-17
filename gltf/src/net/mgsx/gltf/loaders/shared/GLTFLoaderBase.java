@@ -145,8 +145,7 @@ public class GLTFLoaderBase implements Disposable {
 				imageResolver.dispose();
 			}
 			
-			materialLoader = new PBRMaterialLoader(textureResolver);
-			// materialLoader = new DefaultMaterialLoader(textureResolver);
+			materialLoader = createMaterialLoader(textureResolver);
 			materialLoader.loadMaterials(glModel.materials);
 			
 			loadCameras();
@@ -162,6 +161,7 @@ public class GLTFLoaderBase implements Disposable {
 			model.scenes = scenes;
 			model.scene = scenes.get(glModel.scene);
 			model.maxBones = skinLoader.getMaxBones();
+			model.textures = textureResolver.getTextures(new Array<Texture>());
 			model.animations = animationLoader.animations;
 			// XXX don't know where the animation are ...
 			for(SceneModel scene : model.scenes){
@@ -169,18 +169,21 @@ public class GLTFLoaderBase implements Disposable {
 			}
 
 			model.textureResolver = textureResolver;
-			
+
 			//copy(loadedMeshes, model.meshes = new Array<Mesh>());
 			loadedMeshes.clear();
 			
 			return model;
 		}catch(RuntimeException e){
-			e.printStackTrace(System.out);
 			dispose();
 			throw e;
 		}
 	}
 	
+	protected MaterialLoader createMaterialLoader(TextureResolver textureResolver) {
+		return new PBRMaterialLoader(textureResolver);
+	}
+
 	private void loadLights() {
 		if(glModel.extensions != null){
 			KHRLightsPunctual.GLTFLights lightExt = glModel.extensions.get(KHRLightsPunctual.GLTFLights.class, KHRLightsPunctual.EXT);
